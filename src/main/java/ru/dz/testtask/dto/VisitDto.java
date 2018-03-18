@@ -2,6 +2,8 @@ package ru.dz.testtask.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 16.03.18
  *
@@ -10,6 +12,9 @@ import lombok.Data;
 @Data
 public class VisitDto {
 
+    @NotNull
     private String userId;
+
+    @NotNull
     private String pageId;
 }
