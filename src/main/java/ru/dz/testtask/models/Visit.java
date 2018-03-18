@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * 16.03.18
@@ -23,5 +23,7 @@ public class Visit {
 
     private String userId;
     private String pageId;
-    private Timestamp time;
+
+    @Temporal(TemporalType.DATE)
+    private Date date;
 }

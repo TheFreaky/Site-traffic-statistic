@@ -1,5 +1,6 @@
 package ru.dz.testtask.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -8,9 +9,10 @@ import lombok.Data;
  * @author Kuznetsov Maxim
  */
 @Data
+@Builder
 public class PeriodStatDto {
 
-    private Integer visitorsCount;
-    private Integer uniqueUserCount;
-    private Integer regularUserCount;
+    private Long visitorsCount;
+    private Long uniqueUserCount;
+    private Long regularUserCount;
 }
