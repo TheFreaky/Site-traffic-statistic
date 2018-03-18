@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import ru.dz.testtask.repositories.UniqueUserRepository;
-import ru.dz.testtask.utils.DateHelper;
 
-import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 16.03.18
@@ -18,7 +18,7 @@ public class UniqueUserRepositoryRedisImpl implements UniqueUserRepository {
 
     private static final String KEY = "unique-user:";
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
     public UniqueUserRepositoryRedisImpl(RedisTemplate<String, String> redisTemplate) {
@@ -26,16 +26,25 @@ public class UniqueUserRepositoryRedisImpl implements UniqueUserRepository {
     }
 
     @Override
-    public void addUser(String userId) {
-        String key = KEY + DateHelper.getFormattedDate();
-        redisTemplate.opsForSet().add(key, userId);
-        Date nextDay = DateHelper.getNextDay();
-        redisTemplate.expireAt(key, nextDay);
+    public void save(String userId, String currentDate) {
+        String key = KEY + currentDate;
+        redisTemplate.opsForHyperLogLog().add(key, userId);
     }
 
     @Override
-    public boolean isUserUnique(String userId) {
-        String key = KEY + DateHelper.getFormattedDate();
-        return !redisTemplate.opsForSet().isMember(key, userId);
+    public Long countTodayUniqueUser(String currentDate) {
+        String key = KEY + currentDate;
+        return Optional.ofNullable(redisTemplate.opsForHyperLogLog().size(key)).orElse(0L);
+    }
+
+    @Override
+    public Long countPeriodUniqueUser(List<String> dates) {
+        Long uniqueUserCount = 0L;
+
+        for (String date : dates) {
+            uniqueUserCount += countTodayUniqueUser(date);
+        }
+
+        return uniqueUserCount;
     }
 }
