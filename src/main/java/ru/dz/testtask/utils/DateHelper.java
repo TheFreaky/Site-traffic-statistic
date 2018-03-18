@@ -1,10 +1,12 @@
 package ru.dz.testtask.utils;
 
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 16.03.18
@@ -13,18 +15,30 @@ import java.util.Date;
  */
 public class DateHelper {
 
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static FastDateFormat fastDateFormat = FastDateFormat.getInstance("yyyy-MM-dd");
 
-    public static String getFormattedDate() {
-        return dateFormat.format(new Date());
+    public static String getFormattedCurrentDate() {
+        return fastDateFormat.format(new Date());
     }
 
     @SneakyThrows
-    public static Date getNextDay() {
-        Calendar c = Calendar.getInstance();
-        Date date = dateFormat.parse(getFormattedDate());
-        c.setTime(date);
-        c.add(Calendar.DATE, 1);
-        return c.getTime();
+    public static Date getDate(String date) {
+        return fastDateFormat.parse(date);
+    }
+
+    @SneakyThrows
+    public static List<String> getFormattedPeriodDates(String startDate, String endDate) {
+        Date start = fastDateFormat.parse(startDate);
+        Date end = fastDateFormat.parse(endDate);
+
+        List<String> dates = new ArrayList<>();
+        dates.add(startDate);
+
+        while (!DateUtils.isSameDay(start, end)) {
+            start = DateUtils.addDays(start, 1);
+
+            dates.add(fastDateFormat.format(start));
+        }
+        return dates;
     }
 }
