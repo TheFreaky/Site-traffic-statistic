@@ -94,8 +94,8 @@ public class VisitsServiceImpl implements VisitsService {
         Long uniqueUserCount = uniqueUserRepository.countTodayUniqueUser(currentDate);
 
         return DayStatsDto.builder()
-                .visitorsCount(visitsCount)
-                .uniqueVisitorsCount(uniqueUserCount)
+                .visitsCount(visitsCount)
+                .uniqueUserCount(uniqueUserCount)
                 .build();
     }
 

@@ -12,6 +12,6 @@ import lombok.Data;
 @Builder
 public class DayStatsDto {
 
-    private Long visitorsCount;
-    private Long uniqueVisitorsCount;
+    private Long visitsCount;
+    private Long uniqueUserCount;
 }
